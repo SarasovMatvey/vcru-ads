@@ -6,9 +6,9 @@ use JetBrains\PhpStorm\ArrayShape;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * @see Ads::add() Use inside Ads controller.
+ * @see Ads::update() Use inside Ads controller.
  */
-class ApiAddAdRequest extends DtoAbstract
+class ApiUpdateAdRequest extends DtoAbstract
 {
   /**
    * @var string $text
@@ -34,19 +34,19 @@ class ApiAddAdRequest extends DtoAbstract
    * Populate dto from request.
    *
    * @param  ServerRequestInterface $request
-   * @return ApiAddAdRequest
+   * @return ApiUpdateAdRequest
    */
-    public static function fromRequest(ServerRequestInterface $request): ApiAddAdRequest
+    public static function fromRequest(ServerRequestInterface $request): ApiUpdateAdRequest
     {
         $data = $request->getParsedBody();
 
-        $ApiAddAdRequest = new ApiAddAdRequest();
-        $ApiAddAdRequest->text = $data['text'];
-        $ApiAddAdRequest->price = $data['price'];
-        $ApiAddAdRequest->limit = $data['limit'];
-        $ApiAddAdRequest->banner = $data['banner'];
+        $ApiUpdateAdRequest = new ApiUpdateAdRequest();
+        $ApiUpdateAdRequest->text = $data['text'];
+        $ApiUpdateAdRequest->price = $data['price'];
+        $ApiUpdateAdRequest->limit = $data['limit'];
+        $ApiUpdateAdRequest->banner = $data['text'];
 
-        return $ApiAddAdRequest;
+        return $ApiUpdateAdRequest;
     }
 
   /**
