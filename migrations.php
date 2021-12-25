@@ -10,7 +10,7 @@ return [
   ],
 
   'migrations_paths' => [
-    'MyProject\Migrations' => '/src/Db/Migrations',
+    'App\Db\Migrations' => '/src/Db/Migrations',
   ],
 
   'all_or_nothing' => true,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MyProject\Migrations;
+namespace App\Db\Migrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20211220062713 extends AbstractMigration
+final class Version20211225062047 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -20,7 +20,7 @@ final class Version20211220062713 extends AbstractMigration
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->addSql('CREATE TABLE ads (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, price INT NOT NULL, `limit` INT NOT NULL COMMENT \'Limit of shows\', banner VARCHAR(255) NOT NULL, shows INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE ads (id INT AUTO_INCREMENT NOT NULL, text VARCHAR(255) NOT NULL, price INT NOT NULL, shows_limit INT NOT NULL COMMENT \'Limit of shows\', banner VARCHAR(255) NOT NULL, shows INT DEFAULT 0 NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE `utf8_unicode_ci` ENGINE = InnoDB');
     }
 
     public function down(Schema $schema): void
