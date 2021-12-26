@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Dto\Api;
 
+use App\Dto\DtoAbstract;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**

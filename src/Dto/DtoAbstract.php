@@ -20,12 +20,12 @@ abstract class DtoAbstract
    */
     public function serializeJson(): string
     {
-        $json = json_encode($this->getAsArray());
+        $json = json_encode($this->getAsArray(), JSON_FORCE_OBJECT);
 
         if (is_string($json)) {
             return $json;
         } else {
-            throw new Exception('fail to parse json');
+            throw new Exception('Fail to parse json');
         }
     }
 }

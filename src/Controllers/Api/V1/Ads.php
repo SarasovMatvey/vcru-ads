@@ -3,13 +3,15 @@
 namespace App\Controllers\Api\V1;
 
 use App\Controllers\BaseController;
-use App\Dto\ApiAddAdOkResponseData;
-use App\Dto\ApiAddAdRequest;
-use App\Dto\ApiCommonResponse;
-use App\Dto\ApiUpdateAdOkResponseData;
-use App\Dto\ApiUpdateAdRequest;
+use App\Dto\Api\ApiAddAdOkResponseData;
+use App\Dto\Api\ApiAddAdRequest;
+use App\Dto\Api\ApiCommonResponse;
+use App\Dto\Api\ApiUpdateAdOkResponseData;
+use App\Dto\Api\ApiUpdateAdRequest;
+use App\Dto\EmptyDto;
 use App\Entities\Ad;
 use App\Services\AdService;
+use App\Validation\ValidationException;
 use Laminas\Diactoros\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -23,31 +25,55 @@ class Ads extends BaseController
    */
     public function add(ServerRequestInterface $request): ResponseInterface
     {
-        $data = ApiAddAdRequest::fromRequest($request);
+        try {
+            try {
+                $data = ApiAddAdRequest::fromRequest($request);
+            } catch (ValidationException $e) {
+                $responseDto = new ApiCommonResponse();
+                $responseDto->code = 400;
+                $responseDto->message = $e->getMessage();
+                $responseDto->data = new EmptyDto();
 
-        $ad = new Ad();
-        $ad->setText($data->text);
-        $ad->setPrice($data->price);
-        $ad->setLimit($data->limit);
-        $ad->setBanner($data->banner);
+                $response = new Response();
+                $response->getBody()->write($responseDto->serializeJson());
 
-        $this->dbConn->persist($ad);
-        $this->dbConn->flush();
+                return $response;
+            }
 
-        $responseDtoData = new ApiAddAdOkResponseData();
-        $responseDtoData->id = $ad->getId();
-        $responseDtoData->text = $ad->getText();
-        $responseDtoData->banner = $ad->getBanner();
+            $ad = new Ad();
+            $ad->setText($data->text);
+            $ad->setPrice($data->price);
+            $ad->setLimit($data->limit);
+            $ad->setBanner($data->banner);
 
-        $responseDto = new ApiCommonResponse();
-        $responseDto->code = 200;
-        $responseDto->message = "OK";
-        $responseDto->data = $responseDtoData;
+            $this->dbConn->persist($ad);
+            $this->dbConn->flush();
 
-        $response = new Response();
-        $response->getBody()->write($responseDto->serializeJson());
+            $responseDtoData = new ApiAddAdOkResponseData();
+            $responseDtoData->id = $ad->getId();
+            $responseDtoData->text = $ad->getText();
+            $responseDtoData->banner = $ad->getBanner();
 
-        return $response;
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 200;
+            $responseDto->message = "OK";
+            $responseDto->data = $responseDtoData;
+
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
+
+            return $response;
+        } catch (Throwable) {
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 500;
+            $responseDto->message = "Server error";
+            $responseDto->data = new EmptyDto();
+
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
+
+            return $response;
+        }
     }
 
   /**
@@ -58,36 +84,67 @@ class Ads extends BaseController
    */
     public function update(ServerRequestInterface $request, array $args): ResponseInterface
     {
-        $data = ApiUpdateAdRequest::fromRequest($request);
+        try {
+            try {
+                $data = ApiUpdateAdRequest::fromRequest($request);
+            } catch (ValidationException $e) {
+                $responseDto = new ApiCommonResponse();
+                $responseDto->code = 400;
+                $responseDto->message = $e->getMessage();
+                $responseDto->data = new EmptyDto();
 
-        $ad = $this->dbConn->getRepository(Ad::class)->find($args['id']);
+                $response = new Response();
+                $response->getBody()->write($responseDto->serializeJson());
 
-        if (!$ad) {
-            // TODO: replace this with error http response
-            exit(0);
+                return $response;
+            }
+
+            $ad = $this->dbConn->getRepository(Ad::class)->find($args['id']);
+
+            if (!$ad) {
+              $responseDto = new ApiCommonResponse();
+              $responseDto->code = 400;
+              $responseDto->message = "Invalid ad id";
+              $responseDto->data = new EmptyDto();
+
+              $response = new Response();
+              $response->getBody()->write($responseDto->serializeJson());
+
+              return $response;
+            }
+
+            $ad->setText($data->text);
+            $ad->setPrice($data->price);
+            $ad->setLimit($data->limit);
+            $ad->setBanner($data->banner);
+
+            $this->dbConn->flush();
+
+            $responseDtoData = new ApiUpdateAdOkResponseData();
+            $responseDtoData->id = $ad->getId();
+            $responseDtoData->text = $ad->getText();
+            $responseDtoData->banner = $ad->getBanner();
+
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 200;
+            $responseDto->message = "OK";
+            $responseDto->data = $responseDtoData;
+
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
+
+            return $response;
+        } catch (Throwable) {
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 500;
+            $responseDto->message = "Server error";
+            $responseDto->data = new EmptyDto();
+
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
+
+            return $response;
         }
-
-        $ad->setText($data->text);
-        $ad->setPrice($data->price);
-        $ad->setLimit($data->limit);
-        $ad->setBanner($data->banner);
-
-        $this->dbConn->flush();
-
-        $responseDtoData = new ApiUpdateAdOkResponseData();
-        $responseDtoData->id = $ad->getId();
-        $responseDtoData->text = $ad->getText();
-        $responseDtoData->banner = $ad->getBanner();
-
-        $responseDto = new ApiCommonResponse();
-        $responseDto->code = 200;
-        $responseDto->message = "OK";
-        $responseDto->data = $responseDtoData;
-
-        $response = new Response();
-        $response->getBody()->write($responseDto->serializeJson());
-
-        return $response;
     }
 
   /**
@@ -96,26 +153,38 @@ class Ads extends BaseController
    */
     public function getRelevant(ServerRequestInterface $request): Response
     {
-        $adService = new AdService($this->dbConn);
+        try {
+            $adService = new AdService($this->dbConn);
 
-        $ad = $adService->getRelevant();
+            $ad = $adService->getRelevant();
 
-        $ad->setShows($ad->getShows() + 1);
-        $this->dbConn->flush();
+            $ad->setShows($ad->getShows() + 1);
+            $this->dbConn->flush();
 
-        $responseDtoData = new ApiUpdateAdOkResponseData();
-        $responseDtoData->id = $ad->getId();
-        $responseDtoData->text = $ad->getText();
-        $responseDtoData->banner = $ad->getBanner();
+            $responseDtoData = new ApiUpdateAdOkResponseData();
+            $responseDtoData->id = $ad->getId();
+            $responseDtoData->text = $ad->getText();
+            $responseDtoData->banner = $ad->getBanner();
 
-        $responseDto = new ApiCommonResponse();
-        $responseDto->code = 200;
-        $responseDto->message = "OK";
-        $responseDto->data = $responseDtoData;
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 200;
+            $responseDto->message = "OK";
+            $responseDto->data = $responseDtoData;
 
-        $response = new Response();
-        $response->getBody()->write($responseDto->serializeJson());
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
 
-        return $response;
+            return $response;
+        } catch (Throwable) {
+            $responseDto = new ApiCommonResponse();
+            $responseDto->code = 500;
+            $responseDto->message = "Server error";
+            $responseDto->data = new EmptyDto();
+
+            $response = new Response();
+            $response->getBody()->write($responseDto->serializeJson());
+
+            return $response;
+        }
     }
 }
