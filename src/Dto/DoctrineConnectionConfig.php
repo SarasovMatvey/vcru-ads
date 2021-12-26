@@ -12,7 +12,7 @@ class DoctrineConnectionConfig extends DtoAbstract
     public bool $isDevMode;
 
   /**
-   * @var array $entitiesPaths
+   * @var array<string> $entitiesPaths
    */
     public array $entitiesPaths;
 

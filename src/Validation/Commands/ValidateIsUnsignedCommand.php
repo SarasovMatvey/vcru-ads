@@ -7,9 +7,20 @@ use App\Validation\ValidatorCommandInterface;
 
 class ValidateIsUnsignedCommand implements ValidatorCommandInterface
 {
+  /**
+   * @var mixed|int
+   */
     private mixed $checkedInt;
+
+  /**
+   * @var string|null
+   */
     private string|null $customErrorMessage;
 
+  /**
+   * @param int $checkedInt
+   * @param string|null $customErrorMessage
+   */
     public function __construct(int $checkedInt, ?string $customErrorMessage)
     {
         $this->checkedInt = $checkedInt;

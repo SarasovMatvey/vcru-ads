@@ -20,7 +20,7 @@ class MySqlConnectionConfig extends DtoAbstract
    * @var string $password
    */
     public string $password;
-    
+
   /**
    * @var string $host
    */

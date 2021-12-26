@@ -32,9 +32,9 @@ class ApiAddAdOkResponseData extends DtoAbstract
     public function getAsArray(): array
     {
         return [
-        'id' => $this->id,
-        'text' => $this->text,
-        'banner' => $this->banner,
+          'id' => $this->id,
+          'text' => $this->text,
+          'banner' => $this->banner,
         ];
     }
 }

@@ -7,9 +7,20 @@ use App\Validation\ValidatorCommandInterface;
 
 class ValidateIsNotEmptyStringCommand implements ValidatorCommandInterface
 {
+  /**
+   * @var mixed
+   */
     private mixed $checkedString;
+
+  /**
+   * @var string|null
+   */
     private string|null $customErrorMessage;
 
+  /**
+   * @param mixed $checkedString
+   * @param string|null $customErrorMessage
+   */
     public function __construct(mixed $checkedString, ?string $customErrorMessage)
     {
         $this->checkedString = $checkedString;

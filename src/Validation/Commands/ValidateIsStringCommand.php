@@ -7,9 +7,20 @@ use App\Validation\ValidatorCommandInterface;
 
 class ValidateIsStringCommand implements ValidatorCommandInterface
 {
+  /**
+   * @var mixed
+   */
     private mixed $checkedVar;
+
+  /**
+   * @var string|null
+   */
     private string|null $customErrorMessage;
 
+  /**
+   * @param mixed $checkedVar
+   * @param string|null $customErrorMessage
+   */
     public function __construct(mixed $checkedVar, ?string $customErrorMessage)
     {
         $this->checkedVar = $checkedVar;

@@ -7,8 +7,14 @@ use League\Route\Router;
 
 abstract class RegisterAbstract
 {
+  /**
+   * @var EntityManager
+   */
     protected EntityManager $dbConn;
 
+  /**
+   * @param EntityManager $dbConn
+   */
     public function __construct(EntityManager $dbConn)
     {
         $this->dbConn = $dbConn;

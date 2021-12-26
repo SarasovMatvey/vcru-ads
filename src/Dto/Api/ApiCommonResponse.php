@@ -29,9 +29,9 @@ class ApiCommonResponse extends DtoAbstract
     public function getAsArray(): array
     {
         return [
-        'message' => $this->message,
-        'code' => $this->code,
-        'data' => $this->data->getAsArray(),
+          'message' => $this->message,
+          'code' => $this->code,
+          'data' => $this->data->getAsArray(),
         ];
     }
 }

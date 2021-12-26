@@ -6,7 +6,7 @@ use App\Dto\DtoAbstract;
 use JetBrains\PhpStorm\ArrayShape;
 
 /**
- * @see Ads::update() Use inside Ads controller.
+ * @see Ads::getRelevant() Use inside Ads controller.
  */
 class ApiGetRelevantAdOkResponseData extends DtoAbstract
 {

@@ -9,6 +9,10 @@ class Validator
    */
     protected array $validatorCommands;
 
+  /**
+   * @param ValidatorCommandInterface $command
+   * @return void
+   */
     public function addValidatorCommand(ValidatorCommandInterface $command)
     {
         $this->validatorCommands[] = $command;
@@ -16,6 +20,8 @@ class Validator
 
   /**
    * @throws ValidationException
+   *
+   * @return void
    */
     public function validateAll()
     {
@@ -26,6 +32,8 @@ class Validator
 
   /**
    * @throws ValidationException
+   *
+   * @return void
    */
     public function validate(ValidatorCommandInterface $command)
     {

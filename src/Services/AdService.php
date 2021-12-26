@@ -6,6 +6,12 @@ use App\Entities\Ad;
 
 class AdService extends BaseService
 {
+  /**
+   * Returns the ad that is most suitable for display
+   * at the moment based on the algorithm.
+   *
+   * @return Ad
+   */
     public function getRelevant(): Ad
     {
         $queryBuilder = $this->dbConn->createQueryBuilder();

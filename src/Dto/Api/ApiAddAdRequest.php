@@ -65,6 +65,9 @@ class ApiAddAdRequest extends DtoAbstract
     }
 
   /**
+   * @param ServerRequestInterface $request
+   * @return void
+   *
    * @throws ValidationException
    */
     private static function validate(ServerRequestInterface $request)
@@ -99,10 +102,10 @@ class ApiAddAdRequest extends DtoAbstract
     public function getAsArray(): array
     {
         return [
-        'text' => $this->text,
-        'price' => $this->price,
-        'limit' => $this->limit,
-        'banner' => $this->banner,
+          'text' => $this->text,
+          'price' => $this->price,
+          'limit' => $this->limit,
+          'banner' => $this->banner,
         ];
     }
 }

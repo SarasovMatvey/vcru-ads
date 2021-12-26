@@ -11,6 +11,9 @@ class BaseService
    */
     protected EntityManager $dbConn;
 
+  /**
+   * @param EntityManager $dbConn
+   */
     public function __construct(EntityManager $dbConn)
     {
         $this->dbConn = $dbConn;
