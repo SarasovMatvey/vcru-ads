@@ -14,12 +14,6 @@ use League\Route\Router;
  * Without trimming paths will include project 
  * directory name.
  */
-// TODO: remove this after Docker set up
-function trimUrlPrefix()
-{
-  $uri = '/vcre-ads';
-  $_SERVER['REQUEST_URI'] = substr($_SERVER['REQUEST_URI'], (strlen($uri)));
-}
 
 /**
  * @param EntityManager $dbConn
@@ -53,6 +47,7 @@ function getDbConnection(): ?EntityManager
   $mysqlConnConf->dbName = $_ENV['DATABASE_NAME'];
   $mysqlConnConf->user = $_ENV['DATABASE_USER'];
   $mysqlConnConf->password = $_ENV['DATABASE_PASSWORD'];
+  $mysqlConnConf->host = $_ENV['DATABASE_HOST'];
 
   $doctrineConnConf = new DoctrineConnectionConfig();
   $doctrineConnConf->entitiesPaths = [__DIR__ . '/src/Entities'];

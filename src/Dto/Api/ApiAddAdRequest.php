@@ -6,6 +6,7 @@ use App\Dto\DtoAbstract;
 use App\Validation\Commands\ValidateIsIntCommand;
 use App\Validation\Commands\ValidateIsNotZeroCommand;
 use App\Validation\Commands\ValidateIsNotEmptyStringCommand;
+use App\Validation\Commands\ValidateIsSetCommand;
 use App\Validation\Commands\ValidateIsStringCommand;
 use App\Validation\Commands\ValidateIsUnsignedCommand;
 use App\Validation\Commands\ValidateKeyExistCommand;

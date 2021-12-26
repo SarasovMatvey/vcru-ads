@@ -34,14 +34,15 @@ class MySqlDbConnector extends DbConnectorAbstract
   /**
    * {@inheritdoc}
    */
-    #[ArrayShape(['driver' => "string", 'dbname' => "string", 'user' => "string", 'password' => "string"])]
+    #[ArrayShape(['driver' => "string", 'dbname' => "string", 'user' => "string", 'password' => "string", 'host' => "string"])]
     protected function getDbConnectionParams(): array
     {
         return [
-        'driver'   => 'pdo_mysql',
-        'dbname'   => $this->dbConnectionConfig->dbName,
-        'user'     => $this->dbConnectionConfig->user,
-        'password' => $this->dbConnectionConfig->password,
+          'host' => $this->dbConnectionConfig->host,
+          'dbname'   => $this->dbConnectionConfig->dbName,
+          'user'     => $this->dbConnectionConfig->user,
+          'password' => $this->dbConnectionConfig->password,
+          'driver'   => 'pdo_mysql',
         ];
     }
 

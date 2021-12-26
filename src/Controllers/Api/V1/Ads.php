@@ -63,10 +63,10 @@ class Ads extends BaseController
             $response->getBody()->write($responseDto->serializeJson());
 
             return $response;
-        } catch (Throwable) {
+        } catch (Throwable $e) {
             $responseDto = new ApiCommonResponse();
             $responseDto->code = 500;
-            $responseDto->message = "Server error";
+            $responseDto->message = $e->getMessage();
             $responseDto->data = new EmptyDto();
 
             $response = new Response();
@@ -102,15 +102,15 @@ class Ads extends BaseController
             $ad = $this->dbConn->getRepository(Ad::class)->find($args['id']);
 
             if (!$ad) {
-              $responseDto = new ApiCommonResponse();
-              $responseDto->code = 400;
-              $responseDto->message = "Invalid ad id";
-              $responseDto->data = new EmptyDto();
+                $responseDto = new ApiCommonResponse();
+                $responseDto->code = 400;
+                $responseDto->message = "Invalid ad id";
+                $responseDto->data = new EmptyDto();
 
-              $response = new Response();
-              $response->getBody()->write($responseDto->serializeJson());
+                $response = new Response();
+                $response->getBody()->write($responseDto->serializeJson());
 
-              return $response;
+                return $response;
             }
 
             $ad->setText($data->text);

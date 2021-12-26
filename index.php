@@ -11,6 +11,5 @@ error_reporting(E_ALL);
 
 EnvExtracter::extract(__DIR__);
 
-trimUrlPrefix();
 $dbConn = getDbConnection();
 initRouters($dbConn);
