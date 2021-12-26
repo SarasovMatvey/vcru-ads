@@ -66,7 +66,7 @@ class Ads extends BaseController
         } catch (Throwable $e) {
             $responseDto = new ApiCommonResponse();
             $responseDto->code = 500;
-            $responseDto->message = $e->getMessage();
+            $responseDto->message = "Server error";
             $responseDto->data = new EmptyDto();
 
             $response = new Response();

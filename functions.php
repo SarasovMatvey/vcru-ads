@@ -1,25 +1,23 @@
 <?php
 
+use App\Dto\Api\ApiCommonResponse;
 use App\Dto\DoctrineConnectionConfig;
+use App\Dto\EmptyDto;
 use App\Dto\MySqlConnectionConfig;
 use App\Helpers\DbConnector\MySql\MySqlDbConnector;
 use App\Routers\Api\V1\Register;
 use Doctrine\ORM\EntityManager;
+use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ServerRequestFactory;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use League\Route\Http\Exception\NotFoundException;
 use League\Route\Router;
 
 /**
- * This is necessary to normalize routers paths. 
- * Without trimming paths will include project 
- * directory name.
- */
-
-/**
  * @param EntityManager $dbConn
- * @return void
+ * @return Response|null
  */
-function initRouters(EntityManager $dbConn)
+function initRouters(EntityManager $dbConn): Response|null
 {
   $request = ServerRequestFactory::fromGlobals(
     $_SERVER,
@@ -33,15 +31,32 @@ function initRouters(EntityManager $dbConn)
   $register = new Register($dbConn);
 
   $register->register($router);
-  $response = $router->dispatch($request);
+
+  try {
+    $response = $router->dispatch($request);
+  } catch (Throwable $e) {
+    $responseDto = new ApiCommonResponse();
+    $responseDto->code = 400;
+    $responseDto->message = "Route is not exist";
+    $responseDto->data = new EmptyDto();
+
+    $response = new Response();
+    $response->getBody()->write($responseDto->serializeJson());
+
+    (new SapiEmitter)->emit($response);
+    exit(0);
+  }
+
   (new SapiEmitter)->emit($response);
+  
+  return null;
 }
 
 
 /**
- * @return EntityManager|null
+ * @return EntityManager
  */
-function getDbConnection(): ?EntityManager
+function getDbConnection(): EntityManager
 {
   $mysqlConnConf = new MySqlConnectionConfig();
   $mysqlConnConf->dbName = $_ENV['DATABASE_NAME'];
@@ -56,9 +71,17 @@ function getDbConnection(): ?EntityManager
   $mysqlConnector = new MySqlDbConnector($mysqlConnConf, $doctrineConnConf);
 
   try {
-    return $mysqlConnector->getConnection($doctrineConnConf);
+    return $mysqlConnector->getConnection();
   } catch (Throwable $e) {
-    // TODO: replace this with http response 500    
+    $responseDto = new ApiCommonResponse();
+    $responseDto->code = 500;
+    $responseDto->message = "Server error";
+    $responseDto->data = new EmptyDto();
+
+    $response = new Response();
+    $response->getBody()->write($responseDto->serializeJson());
+
+    (new SapiEmitter)->emit($response);
     exit(0);
   }
 }
