@@ -48,7 +48,7 @@ function initRouters(EntityManager $dbConn): Response|null
   }
 
   (new SapiEmitter)->emit($response);
-  
+
   return null;
 }
 

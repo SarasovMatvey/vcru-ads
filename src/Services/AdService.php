@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Entities\Ad;
+use Exception;
 
 class AdService extends BaseService
 {
@@ -11,6 +12,8 @@ class AdService extends BaseService
    * at the moment based on the algorithm.
    *
    * @return Ad
+   *
+   * @throws Exception
    */
     public function getRelevant(): Ad
     {
@@ -20,6 +23,10 @@ class AdService extends BaseService
         ->where('ad.shows < ad.shows_limit')
         ->getQuery();
         $results = $query->getResult();
+
+        if (count($results) === 0) {
+            throw new Exception('No ads to show');
+        }
 
         $maxPriceAd = $results[0];
 
